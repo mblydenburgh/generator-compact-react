@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Mike Blydenburgh",
+      "authorEmail": "mike.blydenburgh@gmail.com",
+      "authorUrl": "https://github.com/mblydenburgh"
+    }
+  }
+}
