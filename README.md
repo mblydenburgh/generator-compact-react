@@ -1,5 +1,7 @@
 # generator-compact-react [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> Yeoman generator to create a compact-react file
+> Yeoman generator to create a compact-react project
+
+See the [Github](https://github.com/mblydenburgh/generator-compact-react)
 
 ## Installation
 
