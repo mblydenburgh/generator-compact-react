@@ -1,4 +1,4 @@
-/* eslint-disable capitalized-comments, no-warning-comments */
+/* eslint-disable capitalized-comments, no-warning-comments, prettier/prettier */
 "use strict";
 const Generator = require("yeoman-generator");
 const chalk = require("chalk");
@@ -6,6 +6,10 @@ const yosay = require("yosay");
 const prompts = require("./prompts");
 const utils = require("../../utils/utils");
 const mkdirp = require("mkdirp");
+const parser = require("@babel/parser");
+// const traverse = require("babel-traverse");
+const recast = require("recast");
+const { parse, print } = require("recast");
 
 module.exports = class extends Generator {
   prompting() {
@@ -62,6 +66,13 @@ module.exports = class extends Generator {
         main: this.main
       }
     );
+    this.fs.copyTpl(
+      this.templatePath("_webpack.config.js"),
+      this.destinationPath(`${this.appName}/webpack.config.js`),
+      { main: this.main }
+    );
+    // Create empty components folder
+    mkdirp.sync(this.destinationPath(`${this.appName}/app/components`));
 
     /* Update configuration for typescript:
         1. Update package.json with new dependencies
@@ -84,22 +95,72 @@ module.exports = class extends Generator {
         this.templatePath("_tsconfig.json"),
         this.destinationPath(`${this.appName}/tsconfig.json`)
       );
-      this.fs.copyTpl(
-        this.templatePath("_tswebpack.config.js"),
-        this.destinationPath(`${this.appName}/webpack.config.js`),
-        { main: this.main }
+      // Parse and update webpack config
+      // console.log(
+      //   this.fs
+      //     .read(this.destinationPath(`${this.appName}/webpack.config.js`))
+      //     .toString()
+      // );
+
+
+      const webpackAst = parser.parse(
+        this.fs
+          .read(this.destinationPath(`${this.appName}/webpack.config.js`))
+          .toString()
       );
+      // AST Path to webpack module rules array
+      console.log(webpackAst.program.body[2].expression.right.properties[2].value.properties[0].value);
+      console.log("*********************");
+      webpackAst.program.body[2].expression.right.properties[2].value.properties[0].value.elements.forEach(item => {
+        console.log("PRINTING ELEMENTS")
+        console.log(item.properties)
+        item.properties.forEach(prop => {
+          console.log("PRINTING ELEMENT PROPERTIES")
+          console.log(prop.value)
+          if(prop.value.type === "ArrayExpression"){
+            console.log("Printing element property array elements:")
+            console.log(prop.value.elements);
+          }
+        })
+      });
+
+      // const builder = recast.types.builders;
+
+      // Build new module rule to insert using AST Traversing
+      // Construct { test: /\.tsx?$/, "use": ["awesome-typescript-loader"] }
+      const testRegex = utils.astUtils.createRegex("/\\.tsx?$/");
+      const useArray = utils.astUtils.createArray(["awesome-typescript-loader"]);
+      const testProperty = utils.astUtils.createObjectProperty("test", testRegex);
+      const useProperty = utils.astUtils.createObjectProperty("use", useArray);
+
+      const newRule = utils.astUtils.createObjectExpression([testProperty, useProperty]);
+      console.log("NEW RULE:");
+      console.log(newRule);
+      const updatedRules = [...webpackAst.program.body[2].expression.right.properties[2].value.properties[0].value.elements, newRule];
+      console.log("Updated rules:");
+      console.log(updatedRules);
+      // const ruleArr = utils.astUtils.createArray(updatedRules);
+      const elements = webpackAst.program.body[2].expression.right.properties[2].value.properties[0].value;
+      console.log("Elements:");
+      console.log(elements);
+      webpackAst.program.body[2].expression.right.properties[2].value.properties[0].value.elements = updatedRules;
+      // const webpackModules = webpackAst.program.body[2].expression.right.properties[2].value.properties[0].value;
+      // traverse(webpackModules, {
+      //   enter(path) {
+      //     if(path.)
+      //   }
+      // });
     } else {
       // Use Javascript base config
       this.fs.copy(
         this.templatePath("_index.js"),
         this.destinationPath(`${this.appName}/app/index.js`)
       );
-      this.fs.copyTpl(
-        this.templatePath("_webpack.config.js"),
-        this.destinationPath(`${this.appName}/webpack.config.js`),
-        { main: this.main }
-      );
+      // this.fs.copyTpl(
+      //   this.templatePath("_webpack.config.js"),
+      //   this.destinationPath(`${this.appName}/webpack.config.js`),
+      //   { main: this.main }
+      // );
     }
 
     /* Update configuration for GraphQL:
@@ -110,19 +171,16 @@ module.exports = class extends Generator {
         dependencies: utils.packageJsonConfig.graphql.dependencies,
         devDependencies: utils.packageJsonConfig.graphql.devDependencies
       };
-      this.fs.extendJSON(
-        this.destinationPath(`${this.appName}/package.json`),
-        packageJson
-      );
+      this.fs.extendJSON(this.destinationPath(`${this.appName}/package.json`), packageJson);
       this.fs.copyTpl(
         this.templatePath("_.graphqlconfig"),
-        this.destinationPath(`${this.appName}/.graphqlconfig`),
-        { appName: this.appName }
-      );
+        this.destinationPath(`${this.appName}/.graphqlconfig`), { appName: this.appName });
     }
 
-    // Create empty components folder
-    mkdirp.sync(this.destinationPath(`${this.appName}/app/components`));
+    /* Apply Styling Configurations */
+    // switch (this.style) {
+    //   case ""
+    // }
   }
 
   install() {
