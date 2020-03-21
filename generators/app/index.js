@@ -22,7 +22,7 @@ module.exports = class extends Generator {
       this.appName = answers.appName;
       this.language = answers.language;
       if (this.language === "typescript") {
-        this.main = utils.packageJsonConfig.typescript.main;
+        this.main = utils.constants.TS_MAIN;
         // this.webpackModules = [
         //   ...utils.constants.WEBPACK_MODULES,
         //   utils.constants.TS_WEBPACK_MODULE
@@ -121,8 +121,13 @@ module.exports = class extends Generator {
       );
     }
 
-    // Create empty components folder
+    // Create empty components folder & write HTML template file
     mkdirp.sync(this.destinationPath(`${this.appName}/app/components`));
+    this.fs.copyTpl(
+      this.templatePath("index.html"),
+      this.destinationPath(`${this.appName}/app/index.html`),
+      { appName: this.appName }
+    );
   }
 
   install() {

@@ -1,6 +1,6 @@
 {
   "typescript": {
-    "main": "src/index.tsx",
+    "main": "app/index.tsx",
     "dependencies": {
       "@types/react": "16.9.19",
       "@types/react-dom": "16.9.5"

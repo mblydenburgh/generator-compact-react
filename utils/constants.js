@@ -30,15 +30,20 @@ const WEBPACK_MODULES = [
   { test: /\.(jpg|png|jpeg|gif)$/, use: ["file-loader"] }
 ];
 
-const TS_WEBPACK_MODULE = { test: /\.tsx?$/, "use": ["awesome-typescript-loader"] };
+const TS_WEBPACK_MODULE = {
+  test: /\.tsx?$/,
+  use: ["awesome-typescript-loader"]
+};
 
-const MAIN = "./src/index.js";
+const MAIN = "./app/index.js";
+const TS_MAIN = "./app/index.tsx";
 
 module.exports = {
   LANGUAGE_ENUM,
   DEPENDENCIES,
   DEV_DEPENDENCIES,
   MAIN,
+  TS_MAIN,
   WEBPACK_MODULES,
   TS_WEBPACK_MODULE
 };
