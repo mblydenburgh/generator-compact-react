@@ -137,7 +137,11 @@ module.exports = class extends Generator {
       );
     }
 
-    /* Update configuration for styling */
+    /* Update configuration for styling:
+       1. Set package.json dependencies
+       2. Set the styling suffix for style file
+       3. Set template path for webpack config updates
+       4. Update files once config variables set */
     let packageJson;
     let styleSuffix;
     let templatePath;
@@ -208,6 +212,7 @@ module.exports = class extends Generator {
   }
 
   install() {
+    // Set the working directory for the npm install command to the set appName, run npm install
     process.chdir(`${process.cwd()}/${this.appName}`);
     this.installDependencies({
       npm: true,
