@@ -1,7 +1,15 @@
 const LANGUAGE_ENUM = {
-  typescript: "typescript",
-  javascript: "javascript"
+  TYPESCRIPT: "typescript",
+  JAVASCRIPT: "javascript"
 };
+
+const STYLE_ENUM = {
+  CSS: "css",
+  SASS: "sass",
+  SCSS: "scss",
+  LESS: "less",
+  STYLED_COMPONETS: "styled-components"
+}
 
 const DEPENDENCIES = {
   "react": "^16.12.0",
@@ -40,6 +48,7 @@ const TS_MAIN = "./app/index.tsx";
 
 module.exports = {
   LANGUAGE_ENUM,
+  STYLE_ENUM,
   DEPENDENCIES,
   DEV_DEPENDENCIES,
   MAIN,

@@ -1,4 +1,4 @@
-/* eslint-disable capitalized-comments, no-warning-comments */
+/* eslint-disable capitalized-comments, no-warning-comments, default-case */
 "use strict";
 const Generator = require("yeoman-generator");
 const chalk = require("chalk");
@@ -6,6 +6,14 @@ const yosay = require("yosay");
 const prompts = require("./prompts");
 const utils = require("../../utils/utils");
 const mkdirp = require("mkdirp");
+
+const JAVASCRIPT = utils.constants.LANGUAGE_ENUM.JAVASCRIPT;
+const TYPESCRIPT = utils.constants.LANGUAGE_ENUM.TYPESCRIPT;
+const CSS = utils.constants.STYLE_ENUM.CSS;
+const SASS = utils.constants.STYLE_ENUM.SASS;
+const SCSS = utils.constants.STYLE_ENUM.SCSS;
+const LESS = utils.constants.STYLE_ENUM.LESS;
+const STYLED_COMPONENTS = utils.constants.STYLE_ENUM.STYLED_COMPONETS;
 
 module.exports = class extends Generator {
   prompting() {
@@ -21,7 +29,7 @@ module.exports = class extends Generator {
     return this.prompt(prompts).then(answers => {
       this.appName = answers.appName;
       this.language = answers.language;
-      if (this.language === "typescript") {
+      if (this.language === TYPESCRIPT) {
         this.main = utils.constants.TS_MAIN;
         // this.webpackModules = [
         //   ...utils.constants.WEBPACK_MODULES,
@@ -51,7 +59,7 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    // TODO - Find way to template webpack.config.js modules propery to only need one template file
+    // TODO - Find way to template webpack.config.js modules property to only need one template file
 
     // Copy base package.json
     this.fs.copyTpl(
@@ -63,11 +71,19 @@ module.exports = class extends Generator {
       }
     );
 
+    // Create empty components folder & write HTML template file
+    mkdirp.sync(this.destinationPath(`${this.appName}/app/components`));
+    this.fs.copyTpl(
+      this.templatePath("index.html"),
+      this.destinationPath(`${this.appName}/app/index.html`),
+      { appName: this.appName }
+    );
+
     /* Update configuration for typescript:
         1. Update package.json with new dependencies
         2. Update webpack.config.js
         3. Write tsconfig.tsx file */
-    if (this.language === "typescript") {
+    if (this.language === TYPESCRIPT) {
       let packageJson = {
         dependencies: utils.packageJsonConfig.typescript.dependencies,
         devDependencies: utils.packageJsonConfig.typescript.devDependencies
@@ -121,13 +137,74 @@ module.exports = class extends Generator {
       );
     }
 
-    // Create empty components folder & write HTML template file
-    mkdirp.sync(this.destinationPath(`${this.appName}/app/components`));
-    this.fs.copyTpl(
-      this.templatePath("index.html"),
-      this.destinationPath(`${this.appName}/app/index.html`),
-      { appName: this.appName }
+    /* Update configuration for styling */
+    let packageJson;
+    let styleSuffix;
+    let templatePath;
+    switch (this.style) {
+      case CSS: {
+        packageJson = {
+          dependencies: utils.packageJsonConfig.css.dependencies
+        };
+        styleSuffix = CSS;
+        break;
+      }
+
+      case SASS: {
+        packageJson = {
+          devDependencies: utils.packageJsonConfig.sass.devDependencies
+        };
+        styleSuffix = SASS;
+        templatePath = "sasswebpack.config.js";
+        break;
+      }
+
+      case SCSS: {
+        packageJson = {
+          devDependencies: utils.packageJsonConfig.scss.devDependencies
+        };
+        styleSuffix = SCSS;
+        templatePath = "sasswebpack.config.js";
+        break;
+      }
+
+      case LESS: {
+        packageJson = {
+          devDependencies: utils.packageJsonConfig.less.devDependencies
+        };
+        styleSuffix = LESS;
+        templatePath = "lesswebpack.config.js";
+        break;
+      }
+
+      case STYLED_COMPONENTS: {
+        packageJson = {
+          devDependencies:
+            utils.packageJsonConfig["styled-components"].dependencies
+        };
+        break;
+      }
+    }
+
+    // Update package.json, webpack.config.js, write base style file after styling chosen
+    this.fs.extendJSON(
+      this.destinationPath(`${this.appName}/package.json`),
+      packageJson
     );
+    this.fs.write(`${this.appName}/style.${styleSuffix}`, "");
+    if (this.language === JAVASCRIPT && this.style !== CSS) {
+      this.fs.copyTpl(
+        this.templatePath(`_${templatePath}`),
+        this.destinationPath(`${this.appName}/webpack.config.js`),
+        { main: this.main }
+      );
+    } else if (this.language === TYPESCRIPT && this.style !== CSS) {
+      this.fs.copyTpl(
+        this.templatePath(`_ts${templatePath}`),
+        this.destinationPath(`${this.appName}/webpack.config.js`),
+        { main: this.main }
+      );
+    }
   }
 
   install() {
@@ -136,6 +213,14 @@ module.exports = class extends Generator {
       npm: true,
       bower: false,
       yarn: false
-    }).then(() => console.log("Dependencies installed - have fun!"));
+    }).then(() => {
+      console.log("Dependencies installed - have fun!");
+      console.log(
+        `To begin, run the following commands:
+      ${chalk.yellow(`cd ${this.appName}`)}
+      ${chalk.yellow(`npm run start`)}
+      `.trim()
+      );
+    });
   }
 };

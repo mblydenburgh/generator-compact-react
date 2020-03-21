@@ -13,7 +13,7 @@ module.exports = {
       { test: /\.(js)$/, use: "babel-loader" },
       { test: /\.(css)$/, use: ["css-loader", "style-loader"] },
       { test: /\.(jpg|png|jpeg|gif)$/, use: ["file-loader"] },
-      { "test": /\.(tsx)?$/, "use": ["awesome-typescript-loader"] }
+      { test: /\.(tsx)?$/, use: ["awesome-typescript-loader"] }
     ]
 },
 mode: 'development',

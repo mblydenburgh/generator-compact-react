@@ -20,37 +20,19 @@
       },
       {
         "name": "sass",
-        "value": "sass",
-        "suffix": ".sass",
-        "packages": [
-          { "name": "sass-loader", "version": "^3.2.0" },
-          { "name": "node-sass", "version": "^3.7.0" }
-        ]
+        "value": "sass"
       },
       {
         "name": "scss",
-        "value": "scss",
-        "suffix": ".scss",
-        "packages": [
-          { "name": "sass-loader", "version": "^3.2.0" },
-          { "name": "node-sass", "version": "^3.7.0" }
-        ]
+        "value": "scss"
       },
       {
         "name": "less",
-        "value": "less",
-        "suffix": ".less",
-        "packages": [
-          { "name": "less-loader", "version": "^2.2.3" },
-          { "name": "less", "version": "^2.7.1" }
-        ]
+        "value": "less"
       },
       {
         "name": "styled-components",
-        "value": "styled-components",
-        "packages": [
-          { "name": "styled-components", "version": "^4.4.1" }
-        ]
+        "value": "styled-components"
       }
     ],
     "default": "css"

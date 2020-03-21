@@ -26,5 +26,33 @@
       "eslint-plugin-react-hooks": "^2.3.0",
       "regenerator-runtime": "^0.13.3"
     }
+  },
+  "css": {
+    "dependencies": {
+      "normalize.css": "^8.0.1"
+    }
+  },
+  "sass": {
+    "devDependencies": {
+      "sass-loader": "^3.2.0",
+      "node-sass": "^3.7.0"
+    }
+  },
+  "scss": {
+    "devDependencies": {
+      "sass-loader": "^3.2.0",
+      "node-sass": "^3.7.0"
+    }
+  },
+  "less": {
+    "devDependencies": {
+      "less-loader": "^2.2.3",
+      "less": "^2.7.1"
+    }
+  },
+  "styled-components": {
+    "dependencies": {
+      "styled-components": "^4.4.1"
+    }
   }
 }
