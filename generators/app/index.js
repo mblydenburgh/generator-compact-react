@@ -126,10 +126,11 @@ module.exports = class extends Generator {
   }
 
   install() {
+    process.chdir(`${process.cwd()}/${this.appName}`);
     this.installDependencies({
       npm: true,
       bower: false,
       yarn: false
-    });
+    }).then(() => console.log("Dependencies installed - have fun!"));
   }
 };
