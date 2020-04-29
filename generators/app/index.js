@@ -4,7 +4,7 @@ const Generator = require("yeoman-generator");
 const chalk = require("chalk");
 const yosay = require("yosay");
 const prompts = require("./prompts");
-const utils = require("../../utils/utils");
+const utils = require("./utils/utils");
 const mkdirp = require("mkdirp");
 
 const JAVASCRIPT = utils.constants.LANGUAGE_ENUM.JAVASCRIPT;

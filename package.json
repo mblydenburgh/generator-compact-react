@@ -1,6 +1,6 @@
 {
   "name": "generator-compact-react",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "Yeoman generator to create a compact-react project",
   "homepage": "https://www.npmjs.com/package/generator-compact-react",
   "author": {

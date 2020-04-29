@@ -1,4 +1,4 @@
-let options = require("./configoptions");
+let options = require("./configoptions.json");
 
 // Return the requested setting from configoptions.json
 let getSetting = setting => {
