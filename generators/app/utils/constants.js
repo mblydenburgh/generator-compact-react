@@ -8,8 +8,8 @@ const STYLE_ENUM = {
   SASS: "sass",
   SCSS: "scss",
   LESS: "less",
-  STYLED_COMPONETS: "styled-components"
-}
+  STYLED_COMPONENTS: "styled-components"
+};
 
 const DEPENDENCIES = {
   "react": "^16.12.0",

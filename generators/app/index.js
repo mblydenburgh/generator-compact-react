@@ -13,7 +13,7 @@ const CSS = utils.constants.STYLE_ENUM.CSS;
 const SASS = utils.constants.STYLE_ENUM.SASS;
 const SCSS = utils.constants.STYLE_ENUM.SCSS;
 const LESS = utils.constants.STYLE_ENUM.LESS;
-const STYLED_COMPONENTS = utils.constants.STYLE_ENUM.STYLED_COMPONETS;
+const STYLED_COMPONENTS = utils.constants.STYLE_ENUM.STYLED_COMPONENTS;
 
 module.exports = class extends Generator {
   prompting() {
@@ -183,7 +183,7 @@ module.exports = class extends Generator {
 
       case STYLED_COMPONENTS: {
         packageJson = {
-          devDependencies:
+          dependencies:
             utils.packageJsonConfig["styled-components"].dependencies
         };
         break;
