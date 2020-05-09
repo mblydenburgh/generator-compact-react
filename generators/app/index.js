@@ -183,8 +183,7 @@ module.exports = class extends Generator {
 
       case STYLED_COMPONENTS: {
         packageJson = {
-          dependencies:
-            utils.packageJsonConfig["styled-components"].dependencies
+          dependencies: utils.packageJsonConfig.styledComponents.dependencies
         };
         break;
       }
@@ -196,13 +195,13 @@ module.exports = class extends Generator {
       packageJson
     );
     this.fs.write(`${this.appName}/style.${styleSuffix}`, "");
-    if (this.language === JAVASCRIPT && this.style !== CSS) {
+    if (this.language === JAVASCRIPT && this.style !== CSS && this.style !== STYLED_COMPONENTS) {
       this.fs.copyTpl(
         this.templatePath(`_${templatePath}`),
         this.destinationPath(`${this.appName}/webpack.config.js`),
         { main: this.main }
       );
-    } else if (this.language === TYPESCRIPT && this.style !== CSS) {
+    } else if (this.language === TYPESCRIPT && this.style !== CSS && this.style !== STYLED_COMPONENTS) {
       this.fs.copyTpl(
         this.templatePath(`_ts${templatePath}`),
         this.destinationPath(`${this.appName}/webpack.config.js`),
