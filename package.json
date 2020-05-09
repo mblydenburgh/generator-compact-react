@@ -1,7 +1,7 @@
 {
   "name": "generator-compact-react",
-  "version": "0.0.10",
-  "description": "Yeoman generator to create a compact-react project",
+  "version": "0.0.11",
+  "description": "Yeoman generator to create a compact-react project with a minimal webpack config",
   "homepage": "https://www.npmjs.com/package/generator-compact-react",
   "author": {
     "name": "Mike Blydenburgh",
@@ -36,9 +36,9 @@
     "npm": ">= 4.0.0"
   },
   "dependencies": {
-    "chalk": "^2.1.0",
+    "chalk": "^4.0.0",
     "no-cra-template": "^1.0.0",
-    "yeoman-generator": "^2.0.1",
+    "yeoman-generator": "^4.10.0",
     "yosay": "^2.0.1",
     "mkdirp": "latest"
   },
