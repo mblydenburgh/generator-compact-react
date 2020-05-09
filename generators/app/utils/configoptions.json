@@ -31,8 +31,8 @@
         "value": "less"
       },
       {
-        "name": "styled-components",
-        "value": "styled-components"
+        "name": "styledComponents",
+        "value": "styledComponents"
       }
     ],
     "default": "css"
